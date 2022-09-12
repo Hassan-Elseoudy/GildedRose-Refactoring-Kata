@@ -17,9 +17,8 @@ class TexttestFixture {
             Pass("Backstage passes to a TAFKAL80ETC concert", 5, 49),  // this conjured item does not work properly yet
             Conjured("Conjured Mana Cake", 3, 6))
 
-        val app = GildedRose(items)
         val days = 10
-        val apps = generateSequence(app) { it.updated() }
+        val apps = generateSequence(items) { it.updated() }
         val lines = apps.take(days).flatMapIndexed { i, currentApp ->
             listOf(
                 "-------- day $i --------") +
