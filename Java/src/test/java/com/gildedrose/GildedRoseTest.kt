@@ -8,7 +8,7 @@ internal class GildedRoseTest {
     fun foo() {
         val items = listOf<Item>(Item("foo", 0, 0))
         val app = GildedRose(items)
-        app.updateQuality()
+        app.updated()
         Assertions.assertEquals("foo", app.items[0].name)
     }
 }
