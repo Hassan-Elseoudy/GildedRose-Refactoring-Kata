@@ -4,7 +4,7 @@ open class Item(var name: String, var sellIn: Int = 0, var quality: Int = 0) {
     override fun toString(): String = "$name, $sellIn, $quality"
 }
 
-open class BaseItem(name: String, sellIn: Int = 0, quality: Int = 0, private val aging: () -> Int = fun() = 1) : Item(name, sellIn, quality) {
+open class BaseItem(name: String, sellIn: Int = 0, quality: Int = 0, private val aging: () -> Int = { 1 }) : Item(name, sellIn, quality) {
     open fun update() {
         val name = name
         sellIn -= aging()
