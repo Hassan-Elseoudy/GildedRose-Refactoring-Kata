@@ -6,9 +6,23 @@ open class Item(var name: String, var sellIn: Int = 0, var quality: Int = 0,
                 private val saturation: (Int) -> Int = Saturation.standard) {
     override fun toString(): String = "$name, $sellIn, $quality"
 
-    open fun update() {
+    fun update() {
         sellIn -= aging()
         quality = saturation(quality - degradation(sellIn, quality))
     }
+
+     fun updated(): Item {
+        sellIn -= aging()
+        quality = saturation(quality - degradation(sellIn, quality))
+         return Item(
+             name,
+             sellIn = sellIn,
+             quality = quality,
+             aging = aging,
+             degradation = degradation,
+             saturation = saturation
+         )
+    }
+
 
 }
