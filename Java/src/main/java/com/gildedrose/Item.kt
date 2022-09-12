@@ -2,8 +2,17 @@
 
 package com.gildedrose
 
-open class Item(var name: String, var sellIn: Int = 0, var quality: Int = 0) {
+open class Item(var name: String, var sellIn: Int = 0, var quality: Int = 0,
+    private val aging: () -> Int = Aging.standard,
+                private val degradation: (Int, Int) -> Int = Degradation.standard,
+                private val saturation: (Int) -> Int = Saturation.standard) {
     override fun toString(): String = "$name, $sellIn, $quality"
+
+    open fun update() {
+        sellIn -= aging()
+        quality = saturation(quality - degradation(sellIn, quality))
+    }
+
 }
 
 object Aging {
@@ -29,22 +38,7 @@ object Saturation {
 }
 
 
-class BaseItem(name: String,
-               sellIn: Int = 0,
-               quality: Int = 0,
-               private val aging: () -> Int = Aging.standard,
-               private val degradation: (Int, Int) -> Int = Degradation.standard,
-               private val saturation: (Int) -> Int = Saturation.standard)
-    : Item(name, sellIn, quality) {
-    open fun update() {
-        sellIn -= aging()
-        quality = saturation(quality - degradation(sellIn, quality))
-    }
-
-}
-
-
-fun Sulfuras(name: String, sellIn: Int = 0, quality: Int = 0) = BaseItem(
+fun Sulfuras(name: String, sellIn: Int = 0, quality: Int = 0) = Item(
     name,
     sellIn,
     quality,
@@ -53,14 +47,14 @@ fun Sulfuras(name: String, sellIn: Int = 0, quality: Int = 0) = BaseItem(
     saturation = Saturation.none)
 
 
-fun Brie(name: String, sellIn: Int = 0, quality: Int = 0) = BaseItem(
+fun Brie(name: String, sellIn: Int = 0, quality: Int = 0) = Item(
     name,
     sellIn,
     quality,
     degradation = Degradation.standard * -1)
 
 
-fun Pass(name: String, sellIn: Int = 0, quality: Int = 0) = BaseItem(
+fun Pass(name: String, sellIn: Int = 0, quality: Int = 0) = Item(
     name,
     sellIn,
     quality,
@@ -73,7 +67,7 @@ fun Pass(name: String, sellIn: Int = 0, quality: Int = 0) = BaseItem(
         }
     })
 
-fun Conjured(name: String, sellIn: Int = 0, quality: Int = 0) = BaseItem(
+fun Conjured(name: String, sellIn: Int = 0, quality: Int = 0) = Item(
     name,
     sellIn,
     quality,
