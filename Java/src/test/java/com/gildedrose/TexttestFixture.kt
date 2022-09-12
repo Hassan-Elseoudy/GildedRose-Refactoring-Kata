@@ -22,16 +22,16 @@ class TexttestFixture {
             Pass("Backstage passes to a TAFKAL80ETC concert", 5, 49),  // this conjured item does not work properly yet
             Conjured("Conjured Mana Cake", 3, 6))
 
-        var app = GildedRose(items)
+        val app = GildedRose(items)
         val days = 10
-        for (i in 0 until days) {
+        val apps = generateSequence(app) { it.updated() }
+        apps.take(days).forEachIndexed { i, currentApp ->
             out.println("-------- day $i --------")
             out.println("name, sellIn, quality")
-            for (item in app.items) {
+            for (item in currentApp.items) {
                 out.println(item)
             }
             out.println()
-            app = app.updated()
         }
         println(stream.toString())
         Assertions.assertEquals(expected, stream.toString())
